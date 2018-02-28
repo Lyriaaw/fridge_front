@@ -16,7 +16,8 @@ angular.module('myApp.index', ['ngRoute'])
     getContent: getFridgeContent,
 		getSoonObsoleteItems: getSoonObsoleteItems,
 		getCurrentProducts: getCurrentProducts,
-		saveItem: saveItem
+		saveItem: saveItem,
+		findAvailableRecipes: findAvailableRecipes
   };
 
 
@@ -30,8 +31,11 @@ angular.module('myApp.index', ['ngRoute'])
 
   function getCurrentProducts() {
     return ApiService.get("products");
-
   }
+
+  function findAvailableRecipes(fridge_id) {
+  	return ApiService.get("/recipes/find/" + fridge_id);
+	}
 
 
   function saveItem(amount, limit_date, product, fridge_id) {
@@ -70,6 +74,8 @@ angular.module('myApp.index', ['ngRoute'])
 
   $scope.loading = true;
   $scope.obsolete_loading = true;
+  $scope.obsolete_items = [];
+
 
   $scope.addItem = {
     addingProduct: false,
@@ -81,11 +87,32 @@ angular.module('myApp.index', ['ngRoute'])
 		limit_date: new Date()
   };
 
-  $scope.obsolete_items = [];
 
-  $scope.fridge_id = $routeParams.id;
+  $scope.recipes = {
+  	loading: true,
+  	list: []
+	};
+
+  function loadRecipes() {
+		$scope.fridge_id = $routeParams.id;
+  	MainService.findAvailableRecipes($scope.fridge_id).then(
+  		function(response) {
+  			$scope.recipes.list = response.data;
+
+  			$timeout(function() {
+  				$scope.recipes.loading = false;
+				}, 100);
+			},
+			function(error) {
+
+			}
+		)
+	}
+	loadRecipes();
+
 
   function loadContent() {
+		$scope.fridge_id = $routeParams.id;
 
     MainService.getContent($scope.fridge_id)
       .then(function(response) {
@@ -166,6 +193,10 @@ angular.module('myApp.index', ['ngRoute'])
 
         $timeout(function() {
 					$scope.addItem.addingProduct = false;
+					$scope.addItem.selectedProduct = {};
+					// $scope.recipes.loading = true;
+					loadRecipes();
+
 				}, 100);
 
       }, function(error) {

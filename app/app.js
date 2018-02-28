@@ -5,6 +5,7 @@ angular.module('myApp', [
   'ngRoute',
   'myApp.index',
   'myApp.recipes',
+  'myApp.view-recipe',
   'myApp.version'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {

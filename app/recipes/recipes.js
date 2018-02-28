@@ -3,12 +3,12 @@
 angular.module('myApp.recipes', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/recipes', {
+  $routeProvider.when('/recipes/add', {
     templateUrl: 'recipes/recipes.html',
     controller: 'RecipesCtrl'
   });
 }])
-.service('RecipeService', ['ApiService', function(ApiService) {
+.service('RecipeService', ['ApiService', '$timeout', function(ApiService, $timeout) {
 
 
   // Todo : Implement this function in APIService or create a ProductService
@@ -36,35 +36,45 @@ angular.module('myApp.recipes', ['ngRoute'])
 
         console.log("Recipe saved ...");
 
+        // This is dirty .... when i'll found how to cascade save entities with ruby this part will be refactored
+        var delay = 0;
         items.forEach(function(item){
-          const saveItem = {
-            receipe_id: recipe_id,
-            product_id: item.product
-          };
+          $timeout(function() {
+            const saveItem = {
+              receipe_id: recipe_id,
+              product_id: item.product
+            };
 
-          ApiService.post("recipe/" + recipe_id + "/add-item", saveItem).then(
-            function(success) {
-              console.log("Saved item");
-              console.log(success.data);
-            },
-            function(error) {
-              console.warn(error);
-            }
-          )
+            ApiService.post("recipe/" + recipe_id + "/add-item", saveItem).then(
+              function(success) {
+                console.log("Saved item");
+                console.log(success.data);
+              },
+              function(error) {
+                console.warn(error);
+              }
+            );
+            delay += 100;
+          }, delay);
         });
 
         steps.forEach(function(step){
-					step.receipe_id = recipe_id;
+          $timeout(function() {
+            step.receipe_id = recipe_id;
 
-          ApiService.post("recipe/" + recipe_id + "/add-step", step).then(
-            function(success) {
-              console.log(success.data);
-            },
-            function(error) {
-              console.warn(error);
-            }
-          )
+            ApiService.post("recipe/" + recipe_id + "/add-step", step).then(
+              function(success) {
+                console.log(success.data);
+              },
+              function(error) {
+                console.warn(error);
+              }
+            );
+
+            delay += 100;
+          }, delay);
         });
+        // I'm not proud ..
 
 
 
