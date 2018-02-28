@@ -23,3 +23,32 @@
   content: "|";
   padding-right: 0.3em;
 }
+
+
+
+
+
+
+/* MAIN */
+.last_product {
+  width : 100%;
+  display : flex;
+  justify-content: space-between;
+}
+
+.last_product:hover {
+  background-color : indigo;
+  color: white;
+  /*filter: brightness(75%);*/
+}
+
+
+/* Adding product */
+.adding_product {
+
+}
+
+.full-size {
+  display : flex;
+  justify-content: space-between;
+}
