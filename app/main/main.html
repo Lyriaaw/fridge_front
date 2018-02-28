@@ -1,12 +1,25 @@
 <div class="row">
-    <div class="col s12 m6">
+    <div class="col s12 m12 l6">
         <div class="row">
             <div class="col s12 m12">
                 <div class="card indigo lighten-5" ng-if="!loading">
                     <div class="card-content">
-                        <span class="card-title">My Pantry</span>
-                        <ul >
-                            <li ng-repeat="item in items" class="last_product"><span>{{ item.product.name }}</span> <span class="pull-right">{{ item.quantity }} {{ item.product.unit}}</span> </li>
+                        <span class="card-title">My Pantry - {{fridge_id}}</span>
+                        <ul>
+                            <li class="row text-center">
+                                <span class="col s4">
+                                    <strong>Name</strong>
+                                </span>
+                                <span class="col s4">
+                                    <strong>Limit date</strong>
+                                </span>
+                                <span class="col s4">
+                                    <strong>Quantity</strong>
+                                </span>
+                            </li>
+                        </ul>
+                        <ul>
+                            <li ng-repeat="item in items" class="row"><span class="col s4">{{ item.product.name }}</span><span class="col s4">{{item.limit_date | date : 'dd/MM/yyyy'}}</span><span class="col s4 text-right">{{ item.quantity }} {{ item.product.unit}}</span> </li>
                         </ul>
                     </div>
                     <div class="card-action">
@@ -22,7 +35,7 @@
                     <div class="card-content">
                         <span class="card-title">Soon obsolete</span>
                         <ul >
-                            <li ng-repeat="product in products.slice().reverse()" class="last_product"><span>{{ product.name }}</span> <span class="pull-right">{{ product.quantity }} {{ product.unit}}</span> </li>
+                            <li ng-repeat="item in obsolete_items" class="row"><span class="col s4">{{ item.product.name }}</span><span class="col s4">{{item.limit_date | date : 'dd/MM/yyyy'}}</span><span class="col s4 text-right">{{ item.quantity }} {{ item.product.unit}}</span> </li>
                         </ul>
                     </div>
                     <div class="card-action">
@@ -61,6 +74,12 @@
                                 <input placeholder="{{addItem.selectedProduct.unit}}" id="amount" type="number" class="validate" ng-model="addItem.productAmount">
                                 <label for="amount">Amount <span ng-if="addItem.selectedProduct.unit">( {{addItem.selectedProduct.unit}} )</span></label>
                             </div>
+
+                            <div class="input-field">
+                                <input placeholder="{{addItem.selectedProduct.unit}}" id="limit_date" type="date" class="validate" ng-model="addItem.limit_date">
+                            </div>
+
+
                         </div>
                     </div>
                     <div class="card-action">
@@ -75,7 +94,7 @@
 
     </div>
 
-    <div class="col s12 m6">
+    <div class="col s12 m12 l6">
         <div class="card indigo lighten-5" ng-if="!loading">
             <div class="card-content">
                 <span class="card-title">Receipes Suggestions</span>

@@ -3,7 +3,7 @@
 angular.module('myApp.index', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/', {
+  $routeProvider.when('/fridge/:id', {
     templateUrl: 'main/main.html',
     controller: 'MainCtrl'
   });
@@ -14,14 +14,19 @@ angular.module('myApp.index', ['ngRoute'])
   // TODO : Take data control out of the controller and place it in the service
   var mainServiceInstance = {
     getContent: getFridgeContent,
+		getSoonObsoleteItems: getSoonObsoleteItems,
 		getCurrentProducts: getCurrentProducts,
 		saveItem: saveItem
   };
 
 
-  function getFridgeContent() {
-    return ApiService.get("items");
+  function getFridgeContent(fridge_id) {
+    return ApiService.get("items/fridge/" + fridge_id);
   }
+  function getSoonObsoleteItems(fridge_id) {
+    return ApiService.get("items/fridge/" + fridge_id + "/obsolete");
+  }
+
 
   function getCurrentProducts() {
     return ApiService.get("products");
@@ -29,16 +34,30 @@ angular.module('myApp.index', ['ngRoute'])
   }
 
 
-  function saveItem(amount, product) {
-    console.log("Saving " + amount + " of " + product.name);
+  function saveItem(amount, limit_date, product, fridge_id) {
 
     const itemBody = {
       product_id: product.id,
-      quantity: amount
+      fridge_id: fridge_id,
+      quantity: amount,
+			limit_date: formatDate(limit_date)
     };
 
     return ApiService.post("items", itemBody);
   }
+
+
+	function formatDate(date) {
+		var d = new Date(date),
+			month = '' + (d.getMonth() + 1),
+			day = '' + d.getDate(),
+			year = d.getFullYear();
+
+		if (month.length < 2) month = '0' + month;
+		if (day.length < 2) day = '0' + day;
+
+		return [year, month, day].join('-');
+	}
 
 
 
@@ -47,9 +66,10 @@ angular.module('myApp.index', ['ngRoute'])
   return mainServiceInstance;
 }])
 
-.controller('MainCtrl', ['$scope', 'MainService', '$timeout', function($scope, MainService, $timeout) {
+.controller('MainCtrl', ['$scope', 'MainService', '$timeout', '$routeParams', function($scope, MainService, $timeout, $routeParams) {
 
   $scope.loading = true;
+  $scope.obsolete_loading = true;
 
   $scope.addItem = {
     addingProduct: false,
@@ -57,13 +77,21 @@ angular.module('myApp.index', ['ngRoute'])
     currentProducts: [],
     selectedProduct: {},
     waitingForProduct: true,
-    productAmount: 0
+    productAmount: 0,
+		limit_date: new Date()
   };
+
+  $scope.obsolete_items = [];
+
+  $scope.fridge_id = $routeParams.id;
 
   function loadContent() {
 
-    MainService.getContent()
+    MainService.getContent($scope.fridge_id)
       .then(function(response) {
+
+      	console.log(response.data);
+
         $scope.items = response.data;
 
 				$timeout(function() {
@@ -73,6 +101,17 @@ angular.module('myApp.index', ['ngRoute'])
       }, function(error) {
         console.warn(error);
       });
+
+
+    MainService.getSoonObsoleteItems($scope.fridge_id)
+			.then(function(response) {
+				$scope.obsolete_items = response.data;
+				$timeout(function() {
+					$scope.obsolete_loading = false;
+				}, 100);
+			}, function(error) {
+				console.warn(error);
+			});
   }
 
   loadContent();
@@ -109,6 +148,8 @@ angular.module('myApp.index', ['ngRoute'])
 
 	  $scope.addItem.selectedProduct = product;
 
+
+
 	  $timeout(function() {
 	    $scope.addItem.waitingForProduct = false;
     }, 100);
@@ -118,7 +159,7 @@ angular.module('myApp.index', ['ngRoute'])
 	$scope.saveItem = saveItem;
   function saveItem() {
 
-    MainService.saveItem($scope.addItem.productAmount, $scope.addItem.selectedProduct)
+    MainService.saveItem($scope.addItem.productAmount, $scope.addItem.limit_date, $scope.addItem.selectedProduct, $scope.fridge_id)
       .then(function(success){
         $scope.items.push(success.data);  // Let's avoid to reload the page and fetch again in the database
 
