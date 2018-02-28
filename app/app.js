@@ -4,13 +4,13 @@
 angular.module('myApp', [
   'ngRoute',
   'myApp.index',
-  'myApp.view2',
+  'myApp.recipes',
   'myApp.version'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
 
-  $routeProvider.otherwise({redirectTo: '/'});
+  $routeProvider.otherwise({redirectTo: '/fridge/1'});
 }])
 .service("ApiService", ['$http', function($http) {// TODO : Place Service in a different file
 	var apiServiceInstance = {

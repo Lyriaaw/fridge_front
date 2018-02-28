@@ -104,6 +104,7 @@ angular.module('myApp.index', ['ngRoute'])
 
 
     MainService.getSoonObsoleteItems($scope.fridge_id)
+		// Todo : Fetch products from fridge content directly
 			.then(function(response) {
 				$scope.obsolete_items = response.data;
 				$timeout(function() {

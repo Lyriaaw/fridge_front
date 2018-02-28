@@ -1,0 +1,75 @@
+<div class="row">
+
+  <div class="col s12">
+    <div class="card indigo lighten-5" ng-if="!loading">
+      <div class="card-content">
+        <span class="card-title">Add recipe</span>
+
+        <h5>Description</h5>
+
+        <div class="input-field">
+          <input placeholder="Name" id="name" type="text" class="validate" ng-model="newRecipe.name">
+          <label for="name">Name</label>
+        </div>
+        <div class="input-field">
+          <textarea id="description" class="materialize-textarea" ng-model="newRecipe.description"></textarea>
+          <label for="description">Description</label>
+        </div>
+
+        <hr>
+        <h5>Item</h5>
+
+        <div class="row" ng-repeat="item in newRecipe.items">
+          <div class="col s6">
+            <select name="test" id="test" class="browser-default" ng-model="item.product">
+              <option ng-repeat="product in products" value="{{product.id}}">{{product.name}}</option>
+            </select>
+          </div>
+
+          <div class="input-field col s6">
+            <input placeholder="Amount" id="amount" type="number" class="validate" ng-model="item.quantity">
+            <label for="amount">Amount</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col s12">
+            <a ng-click="functions.addItem()">Add item</a>
+          </div>
+        </div>
+
+        <hr>
+      <h5>Step</h5>
+
+        <div class="row" ng-repeat="step in newRecipe.steps">
+          <div class="input-field col s12">
+            <textarea id="step{{$index}}" class="materialize-textarea" ng-model="step.description"></textarea>
+            <label for="step{{$index}}">Description</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col s12">
+            <a ng-click="functions.addStep()">Add Setp</a>
+          </div>
+        </div>
+
+
+
+
+
+      </div>
+      <div class="card-action">
+        <a ng-click="functions.cancelRecipe()">Reset</a>
+        <a ng-click="functions.saveRecipe()">Add</a>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+<script>
+//	$(".selection").material_select();
+</script>

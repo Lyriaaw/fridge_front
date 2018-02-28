@@ -28,8 +28,8 @@
     <div class="nav-wrapper">
       <a href="#" class="brand-logo">Fridge Manager</a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="#!/my-fridge">My Fridge</a></li>
-        <li><a href="/#!/receipes">Receipes</a></li>
+        <li><a href="#!/fridge/1">My Fridge</a></li>
+        <li><a href="/#!/recipes">Recipes</a></li>
       </ul>
     </div>
   </nav>
@@ -48,11 +48,18 @@
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="app.js"></script>
   <script src="main/main.js"></script>
-  <script src="view2/view2.js"></script>
+  <script src="recipes/recipes.js"></script>
   <script src="components/version/version.js"></script>
   <script src="components/version/version-directive.js"></script>
   <script src="components/version/interpolate-filter.js"></script>
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+  <script>
+		$(document).ready(function() {
+			$('select').material_select();
+		});
+  </script>
+
 </body>
 </html>
