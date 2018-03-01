@@ -13,7 +13,7 @@ angular.module('myApp.view-recipe', ['ngRoute'])
 
   // Todo : Implement this function in APIService or create a ProductService
   function getRecipe(recipeId) {
-    return ApiService.get("receipes/" + recipeId);
+    return ApiService.get("recipes/" + recipeId);
   }
 
 
@@ -26,15 +26,30 @@ angular.module('myApp.view-recipe', ['ngRoute'])
   $scope.loading = true;
   $scope.recipe = {};
 
+  $scope.headerUrl = "header.html";
+
+  $scope.functions = {
+		finished: finished,
+		cancelRecipe: cancelRecipe
+  };
+
+  function finished() {
+    console.log("Recipe finished");
+  }
+
+  function cancelRecipe() {
+    console.log("not implemented 0:) ")
+  }
+
   function loadRecipe() {
     const recipe_id = $routeParams.id;
+    // $scope.fridge_id = $routeParams.fridgeId;
 
     console.log("Hello ?");
 
     ViewRecipeService.getRecipe(recipe_id).then(
       function(response) {
         $scope.recipe = response.data;
-        console.log($scope.recipe.receipe_steps[0].description);
 
         $timeout(function() {
           $scope.loading = false;

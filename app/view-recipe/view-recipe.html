@@ -1,3 +1,5 @@
+<div ng-include="headerUrl"></div>
+
 <div class="row">
 
   <div class="col s12">
@@ -13,12 +15,16 @@
           <div class="col s3">
             <p><strong>Ingredients</strong></p>
             <ul>
-              <li ng-repeat="item in recipe.receipe_items">{{item.product.name}}</li>
+              <li ng-repeat="item in recipe.recipes_items">
+                <span>{{item.quantity}}</span>
+                <span>{{item.product.unit}}</span>
+                <span>{{item.product.name}}</span>
+              </li>
             </ul>
           </div>
           <div class="col s9">
             <p><strong>Steps</strong></p>
-            <div class="row" ng-repeat="step in recipe.receipe_steps">
+            <div class="row" ng-repeat="step in recipe.recipes_steps">
               <div class="col s1">
                 Step #{{$index}}
               </div>
@@ -32,8 +38,8 @@
 
         </div>
       <div class="card-action">
-        <a ng-click="functions.cancelRecipe()">Reset</a>
-        <a ng-click="functions.saveRecipe()">Add</a>
+        <a ng-click="functions.cancelRecipe()">Cancel</a>
+        <a ng-click="functions.finished()">Finished</a>
       </div>
     </div>
   </div>

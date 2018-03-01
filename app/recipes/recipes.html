@@ -1,3 +1,6 @@
+<div ng-include="headerUrl"></div>
+
+
 <div class="row">
 
   <div class="col s12">
@@ -19,7 +22,7 @@
         <hr>
         <h5>Item</h5>
 
-        <div class="row" ng-repeat="item in newRecipe.items">
+        <div class="row" ng-repeat="item in newRecipe.recipes_items">
           <div class="col s6">
             <select name="test" id="test" class="browser-default" ng-model="item.product">
               <option ng-repeat="product in products" value="{{product.id}}">{{product.name}}</option>
@@ -41,7 +44,7 @@
         <hr>
       <h5>Step</h5>
 
-        <div class="row" ng-repeat="step in newRecipe.steps">
+        <div class="row" ng-repeat="step in newRecipe.recipes_steps">
           <div class="input-field col s12">
             <textarea id="step{{$index}}" class="materialize-textarea" ng-model="step.description"></textarea>
             <label for="step{{$index}}">Description</label>

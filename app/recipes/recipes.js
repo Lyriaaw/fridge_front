@@ -22,13 +22,31 @@ angular.module('myApp.recipes', ['ngRoute'])
     console.log("Saving " + recipe.name);
 
     const recipeBase = {
-      name: recipe.name,
-      description: recipe.description
+      recipe :recipe,
+      items :recipe.recipes_items,
+      steps :recipe.recipes_steps
     };
 
     const items = recipe.items;
     const steps = recipe.steps;
 
+    console.log(recipe);
+
+
+
+
+    return ApiService.post("recipes", recipeBase).then(
+      function(response) {
+        console.log(response);
+        return response;
+      },
+      function(error) {
+        console.warn("Error while posting recipe")
+      }
+    )
+
+
+    /*
     ApiService.post("receipes", recipeBase).then(
       function(response) {
         const recipe_id = response.data.id;
@@ -42,7 +60,8 @@ angular.module('myApp.recipes', ['ngRoute'])
           $timeout(function() {
             const saveItem = {
               receipe_id: recipe_id,
-              product_id: item.product
+              product_id: item.product,
+              quantity: item.quantity
             };
 
             ApiService.post("recipe/" + recipe_id + "/add-item", saveItem).then(
@@ -82,7 +101,7 @@ angular.module('myApp.recipes', ['ngRoute'])
       function(error) {
         console.warn(error);
       }
-    )
+    )*/
   }
 
 
@@ -93,9 +112,11 @@ angular.module('myApp.recipes', ['ngRoute'])
   }
 
 }])
-.controller('RecipesCtrl', ['$scope', 'RecipeService', '$timeout', function($scope, RecipeService, $timeout) {
+.controller('RecipesCtrl', ['$scope', 'RecipeService', '$timeout', '$location', 'DataService', function($scope, RecipeService, $timeout, $location, DataService) {
   $scope.loading = true;
   $scope.products = [];
+
+	$scope.headerUrl = "header.html";
 
 
 
@@ -104,10 +125,10 @@ angular.module('myApp.recipes', ['ngRoute'])
 			name: '',
 			description: '',
 			persons: 4,
-			items: [
+			recipes_items: [
         {product: {}, quantity: ''}
       ],
-			steps: [
+			recipes_steps: [
         {description: ''}
       ]
 		};
@@ -127,17 +148,23 @@ angular.module('myApp.recipes', ['ngRoute'])
   }
 
   function saveRecipe() {
-    RecipeService.saveRecipe($scope.newRecipe);
+    RecipeService.saveRecipe($scope.newRecipe).then(
+      function(response) {
+        // console.log("Received response : ");
+        // console.log(response);
+        $location.path("recipe/" + response.data.id + "/" + $scope.fr)
+      }
+    )
   }
 
   function addItem() {
-    $scope.newRecipe.items.push(
+    $scope.newRecipe.recipes_items.push(
       {product: {}, quantity: ''}
     )
   }
 
   function addStep() {
-		$scope.newRecipe.steps.push(
+		$scope.newRecipe.recipes_steps.push(
 			{description: ''}
     )
   }

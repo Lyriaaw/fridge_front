@@ -21,6 +21,7 @@ angular.module('myApp.index', ['ngRoute'])
   };
 
 
+
   function getFridgeContent(fridge_id) {
     return ApiService.get("items/fridge/" + fridge_id);
   }
@@ -70,14 +71,18 @@ angular.module('myApp.index', ['ngRoute'])
   return mainServiceInstance;
 }])
 
-.controller('MainCtrl', ['$scope', 'MainService', '$timeout', '$routeParams', function($scope, MainService, $timeout, $routeParams) {
+.controller('MainCtrl', ['$scope', 'MainService', '$timeout', '$routeParams', 'DataService', function($scope, MainService, $timeout, $routeParams, DataService) {
 
   $scope.loading = true;
   $scope.obsolete_loading = true;
   $scope.obsolete_items = [];
+	$scope.headerUrl = "header.html";
 
 
-  $scope.addItem = {
+
+
+
+	$scope.addItem = {
     addingProduct: false,
     newItem: {},
     currentProducts: [],
@@ -94,7 +99,7 @@ angular.module('myApp.index', ['ngRoute'])
 	};
 
   function loadRecipes() {
-		$scope.fridge_id = $routeParams.id;
+		// $scope.fridge_id = $routeParams.id;
   	MainService.findAvailableRecipes($scope.fridge_id).then(
   		function(response) {
   			$scope.recipes.list = response.data;
@@ -112,7 +117,9 @@ angular.module('myApp.index', ['ngRoute'])
 
 
   function loadContent() {
-		$scope.fridge_id = $routeParams.id;
+		// $scope.fridge_id = $routeParams.id;
+
+		DataService.saveFridgeId($routeParams.id);
 
     MainService.getContent($scope.fridge_id)
       .then(function(response) {
