@@ -6,8 +6,14 @@
 </div>
 
 
+<div class="card" ng-if="!loading">
+    <div class="card-content">
+        <span class="card-title">Recipes Suggestions</span>
+    </div>
+</div> <!--end card-->
 
-<div  ng-repeat="recipe in recipes.list |limitTo: 3">
+
+<div  ng-repeat="recipe in recipes.list">
     <div class="card " ng-if="!recipes.loading">
         <div class="card-content">
             <span class="card-title">{{recipe.name}}</span>

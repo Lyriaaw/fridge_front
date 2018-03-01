@@ -26,7 +26,9 @@
 
 
 body {
-  background-image: url("images/background-3045402_1920.png");
+  background: url("images/background-2.jpg") no-repeat, repeat;
+  background-size: 100%, 100%;
+
   background-blend-mode: lighten;
 }
 
@@ -42,7 +44,7 @@ body {
   justify-content: space-between;
 }
 
-.last_product:hover {
+.product_selection:hover {
   background-color : indigo;
   color: white;
   /*filter: brightness(75%);*/
@@ -61,4 +63,12 @@ body {
 
 .navbar_margin {
   margin-bottom: 1vh;
+}
+
+
+
+.centered {
+  display : flex;
+  justify-content: center;
+  align-items: center;
 }

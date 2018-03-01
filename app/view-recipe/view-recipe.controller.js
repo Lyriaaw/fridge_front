@@ -8,7 +8,7 @@ angular.module('myApp.view-recipe', ['ngRoute'])
     controller: 'ViewRecipeCtrl'
   });
 }])
-.controller('ViewRecipeCtrl', ['$scope', 'ViewRecipeService', '$timeout', '$routeParams', 'RecipeAdviserService', '$location', function($scope, ViewRecipeService, $timeout, $routeParams, RecipeAdviserService, $location) {
+.controller('ViewRecipeCtrl', ['$scope', 'ViewRecipeService', '$timeout', '$routeParams', 'RecipeAdviserService', '$location', 'DataService', function($scope, ViewRecipeService, $timeout, $routeParams, RecipeAdviserService, $location, DataService) {
   $scope.loading = true;
   $scope.recipe = {};
 
@@ -25,7 +25,7 @@ angular.module('myApp.view-recipe', ['ngRoute'])
   }
 
   function cancelRecipe() {
-    console.log("not implemented 0:) ")
+    $location.path("fridge/" + DataService.getFridgeId());
   }
 
   function loadRecipe() {

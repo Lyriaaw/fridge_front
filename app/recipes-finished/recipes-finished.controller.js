@@ -9,11 +9,9 @@ angular.module('myApp.recipe-finished', ['ngRoute'])
   });
 }])
 
-.controller('RecipeFinishedCtrl', ['$scope', 'RecipeFinishedService', '$timeout', '$location', 'RecipeAdviserService', 'ApiService', function($scope, RecipeFinishedService, $timeout, $location, RecipeAdviserService, ApiService) {
+.controller('RecipeFinishedCtrl', ['$scope', 'RecipeFinishedService', '$timeout', '$location', 'RecipeAdviserService', 'ApiService', 'DataService', function($scope, RecipeFinishedService, $timeout, $location, RecipeAdviserService, ApiService, DataService) {
 
   $scope.loading = true;
-
-	$scope.headerUrl = "header.html";
 
 	$scope.recipe = {};
 
@@ -60,19 +58,54 @@ angular.module('myApp.recipe-finished', ['ngRoute'])
 			});
 		});
 
+		separateFinishedAndUpdatedItems(changed_items);
+
+
+	}
+
+	function separateFinishedAndUpdatedItems(items) {
+
+		var finished = [];
+		var to_update = [];
+
+		items.forEach(function(item) {
+			if (item.quantity <= 0) {
+				finished.push(item);
+				console.log(item.product.name + " is finished");
+			} else {
+				console.log(item.product.name + " is to update");
+				to_update.push(item);
+			}
+		});
+
 		var new_changed_item = {
-			items: changed_items
+			items: to_update
 		};
 
+		console.log("Putting");
 		ApiService.put("items", new_changed_item).then(
 			function(success) {
 				console.log(success);
+				$location.path("fridge/" + DataService.getFridgeId());
 			},
 			function(error) {
 				console.warn(error);
 
 			}
-		)
+		);
+
+		console.log("Deleting");
+		finished.forEach(function(item) {
+			ApiService.delete("items/" + item.id).then(
+				function(response) {
+
+					RecipeAdviserService.deleteItemModelFromFridge(item);
+				},
+				function(error) {
+					console.warn(error);
+				}
+			)
+		});
 
 	}
 

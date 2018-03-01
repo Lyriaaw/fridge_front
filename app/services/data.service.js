@@ -5,6 +5,7 @@ var DataService = angular.module('DataService', [])
 		fridge_id: -1
 	};
 
+	$rootScope.headerUrl = 'header.html';
 
 	function saveFridgeId(fridge_id) {
 		stored_datas.fridge_id = fridge_id;
@@ -18,6 +19,5 @@ var DataService = angular.module('DataService', [])
 	return {
 		saveFridgeId: saveFridgeId,
 		getFridgeId: getFridgeId
-
 	}
 }]);

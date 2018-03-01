@@ -1,12 +1,19 @@
 <div ng-include="headerUrl"></div>
 
 
-
-
 <div class="row">
     <div class="col s12 m12 l6">
         <div class="row">
             <div class="col s12 m12">
+
+                <div class="card" ng-if="!loading">
+                    <div class="card-content">
+                        <span class="card-title">My fridge</span>
+                    </div>
+                </div> <!--end card-->
+
+
+
                 <div class="card" ng-if="!loading">
                     <div class="card-content">
                         <span class="card-title">Fridge n° {{fridge_id}}</span>
@@ -32,20 +39,20 @@
                         </ul>
                     </div>
                     <div class="card-action">
-                        <!--<a href="#">Find a receipe</a>-->
-                        <!--<a href="#">See my Pantry</a>-->
                         <a class="waves-effect waves-light" ng-click="prepareItemAdding()">Add product</a>
                     </div>
-                </div>
+                </div> <!--end card-->
             </div>
-
 
             <div class="col s12"  ng-if="addItem.addingProduct">
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title">Add a product</span>
                         <ul ng-if="addItem.waitingForProduct">
-                            <li ng-repeat="product in addItem.currentProducts" class="full-size"><span>{{ product.name }}</span> <span><a ng-click="selectProduct(product)">select</a> </span></li>
+                            <li ng-repeat="product in addItem.currentProducts" class="full-size product_selection">
+                                <span>{{ product.name }}</span>
+                                <span><a ng-click="selectProduct(product)">select</a> </span>
+                            </li>
                         </ul>
                         <div ng-if="!addItem.waitingForProduct">
                             <p>How many {{addItem.selectedProduct.unit}} of {{ addItem.selectedProduct.name }} ?</p>
@@ -55,21 +62,17 @@
                                 <label for="amount">Amount <span ng-if="addItem.selectedProduct.unit">( {{addItem.selectedProduct.unit}} )</span></label>
                             </div>
 
-                            <div class="input-field">
-                                <input placeholder="{{addItem.selectedProduct.unit}}" id="limit_date" type="date" class="validate" ng-model="addItem.limit_date">
-                            </div>
-
-
+                            <!--<div class="input-field">-->
+                                <!--<input placeholder="{{addItem.selectedProduct.unit}}" id="limit_date" type="date" class="validate" ng-model="addItem.limit_date">-->
+                            <!--</div>-->
                         </div>
                     </div>
                     <div class="card-action">
                         <a class="waves-effect waves-light" ng-click="cancelItemAdding()">Cancel</a>
                         <a ng-click="saveItem()">Add <Item></Item></a>
                     </div>
-                </div>
+                </div><!--end card-->
             </div>
-
-
         </div>
 
     </div>
@@ -77,22 +80,5 @@
     <div class="col s12 m12 l6">
         <div ng-include="'./main/recipes-suggestions.html'"></div>
     </div>
-
-
-
-
-
-
-    <!-- Modals -->
-    <!-- Modal Trigger -->
-
-
-
-
-
-
-
-
-
 </div>
 

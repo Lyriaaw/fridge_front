@@ -1,14 +1,13 @@
 var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 .service("RecipeAdviserService", ['ApiService', 'DataService', '$timeout', function(ApiService, DataService, $timeout) {
 
-
-
 	var availableRecipes = [];
 	var fridge_content = [];
 	var fridge_id;
 	var process_loading = true;
 	var selected_recipes = [];
 	var finished_recipe = {};
+
 
 	/**
 	 * Launching
@@ -32,22 +31,17 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 		}
 	}
 
+	/**
+	 * Handle the receipe and fridge fetch sequence
+	 *
+	 */
 	function process() {
-		console.log("Launching process");
-
-
 		fetchRecipes().then(
 			function(response) {
-				console.log("Recipes fetched");
-
 				fetchFridgeContent().then(
 					function(response) {
-						console.log("Fridge fetched");
-
 						calculateRecipeScore();
 						process_loading = false;
-
-						console.log("Process finished")
 					}
 				);
 
@@ -55,7 +49,7 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 		)
 	}
 	function fetchRecipes() {
-		return ApiService.get("recipes/find/" + DataService.getFridgeId()).then(
+		return ApiService.get("recipes/find/" + fridge_id).then(
 			function(response) {
 				availableRecipes = response.data;
 				return availableRecipes;
@@ -70,17 +64,40 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 			function(response) {
 				fridge_content = response.data;
 				return fridge_content;
+			},
+			function(error) {
+				console.warn(error);
 			}
 		)
 	}
 	function calculateRecipeScore() {
-		console.log(availableRecipes.slice(0, 3));
-		selected_recipes = availableRecipes.slice(0, 3);
+		// TODO : implement, now it just select 3 random recipes from the list
+		selected_recipes = [];
+
+		var temp_list = [];
+		temp_list = availableRecipes;
+
+		if (temp_list.length <= 5) {
+			selected_recipes = availableRecipes;
+			return;
+		}
+
+		for (it = 0; it < 5; it++) {
+			var randomIndex = Math.floor(Math.random() * Math.floor(temp_list.length));
+
+			selected_recipes.push(temp_list[randomIndex]);
+
+			temp_list.splice(randomIndex, 1);
+			console.log(temp_list);
+		}
 	}
 
 
 
 
+	/*
+	Getters and setters to interact with the service
+	 */
 
 	function finishRecipe(recipe) {
 		finished_recipe = recipe;
@@ -114,6 +131,11 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 		fridge_content.splice($index, 1);
 	}
 
+	function deleteItemModelFromFridge(item) {
+		var index = fridge_content.indexOf(item);
+		fridge_content.splice(index, 1);
+	}
+
 	return {
 		findAvailableRecipes: findAvailableRecipes,
 		getProcessLoading: getProcessLoading,
@@ -124,6 +146,7 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 		pushLastRecipe: pushLastRecipe,
 		process: process,
 		addItemToFridge: addItemToFridge,
+		deleteItemModelFromFridge: deleteItemModelFromFridge
 
 	};
 

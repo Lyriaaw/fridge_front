@@ -44,7 +44,7 @@
                 <hr>
 
                 <ul>
-                    <li class="row" ng-repeat="product in products">
+                    <li class="row product_selection" ng-repeat="product in products.reverse()">
                         <span class="col s3"><a ng-click="functions.updateProduct(product)">Update</a> </span>
                         <span class="col s3">{{product.name}}</span>
                         <span class="col s3">{{product.unit}}</span>

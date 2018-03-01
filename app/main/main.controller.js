@@ -13,7 +13,6 @@ angular.module('myApp.index', ['ngRoute'])
   $scope.loading = true;
   $scope.obsolete_loading = true;
   $scope.obsolete_items = [];
-	$scope.headerUrl = "header.html";
 
 
 
@@ -67,12 +66,11 @@ angular.module('myApp.index', ['ngRoute'])
 	}
 
 	loadContent();
-  loadRecipes(); // TODO : Wait for laodContent() before launching loadRecipes()
+  loadRecipes(); // TODO : Wait for loadContent() before launching loadRecipes()
 
   function loadContent() {
 		DataService.saveFridgeId($routeParams.id);
   }
-
 
 
 
@@ -92,6 +90,7 @@ angular.module('myApp.index', ['ngRoute'])
 	function cancelItemAdding() { // Hide the "Add item" card
 		$timeout(function(){
 			$scope.addItem.addingProduct = false;
+			$scope.addItem.waitingForProduct = true;
 		}, 100);
 	}
 
@@ -129,23 +128,18 @@ angular.module('myApp.index', ['ngRoute'])
 	$scope.saveItem = saveItem;
   function saveItem() {
 
-    MainService.saveItem($scope.addItem.productAmount, $scope.addItem.limit_date, $scope.addItem.selectedProduct, $scope.fridge_id)
+    MainService.saveItem($scope.addItem.productAmount, '2018-03-01', $scope.addItem.selectedProduct, $scope.fridge_id)
       .then(function(success){
-      	console.log(success);
-        // $scope.items.push(success.data);  // Let's avoid to reload the page and fetch again in the database
 				RecipeAdviserService.addItemToFridge(success.data);
 
         $timeout(function() {
-
-					// $scope.loading = true;
-
 					loadRecipes();
+
+					$scope.addItem.productAmount = '';
 
 					$scope.addItem.addingProduct = false;
 					$scope.addItem.selectedProduct = {};
-
-
-
+					$scope.addItem.waitingForProduct = true;
 				}, 100);
 
       }, function(error) {
@@ -160,7 +154,6 @@ angular.module('myApp.index', ['ngRoute'])
 
   	ApiService.delete("items/" + item.id).then(
   		function(response) {
-  			// $scope.items.splice(index, 1);
 				loadRecipes();
 
 				$timeout(function() {
