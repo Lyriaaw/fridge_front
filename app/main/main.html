@@ -34,12 +34,12 @@
                             <li ng-repeat="item in items track by $index" class="row">
                                 <span class="col s4">{{ item.product.name }}</span>
                                 <span class="col s4 text-right">{{ item.quantity }} {{ item.product.unit}}</span>
-                                <span><a ng-click="deleteItem(item, $index)">Delete</a></span>
+                                <span><a ng-click="deleteItem(item, $index)" class="btn btn-sm red">Delete</a></span>
                             </li>
                         </ul>
                     </div>
                     <div class="card-action">
-                        <a class="waves-effect waves-light" ng-click="prepareItemAdding()">Add product</a>
+                        <a class="waves-effect waves-light btn green" ng-click="prepareItemAdding()">Add product</a>
                     </div>
                 </div> <!--end card-->
             </div>
@@ -51,7 +51,7 @@
                         <ul ng-if="addItem.waitingForProduct">
                             <li ng-repeat="product in addItem.currentProducts" class="full-size product_selection">
                                 <span>{{ product.name }}</span>
-                                <span><a ng-click="selectProduct(product)">select</a> </span>
+                                <span><a ng-click="selectProduct(product)" class="btn green">select</a> </span>
                             </li>
                         </ul>
                         <div ng-if="!addItem.waitingForProduct">
