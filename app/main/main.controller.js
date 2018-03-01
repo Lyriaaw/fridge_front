@@ -8,7 +8,7 @@ angular.module('myApp.index', ['ngRoute'])
     controller: 'MainCtrl'
   });
 }])
-.controller('MainCtrl', ['$scope', 'MainService', '$timeout', '$routeParams', 'DataService', 'RecipeAdviserService', function($scope, MainService, $timeout, $routeParams, DataService, RecipeAdviserService) {
+.controller('MainCtrl', ['$scope', 'MainService', '$timeout', '$routeParams', 'DataService', 'RecipeAdviserService', 'ApiService', function($scope, MainService, $timeout, $routeParams, DataService, RecipeAdviserService, ApiService) {
 
   $scope.loading = true;
   $scope.obsolete_loading = true;
@@ -26,25 +26,41 @@ angular.module('myApp.index', ['ngRoute'])
   // Launch the recipe adviser and wait for result
 
   function loadRecipes() {
+  	console.log("loading recipes");
+  	$timeout(function() {
+  		$scope.recipes.loading = true;
+		}, 100);
+
+
 		RecipeAdviserService.findAvailableRecipes();
 
 		waitForRecipes(placeContent)
 	}
 
   function waitForRecipes(callback) {
+  	console.log("Waiting for recipes");
+  	console.log(RecipeAdviserService.getProcessLoading());
   	if (RecipeAdviserService.getProcessLoading() === true) {
+  		console.log("Process loading .... ");
   		setTimeout(waitForRecipes, 100, callback);
 		} else {
-  		setTimeout(callback, 50);
+  		setTimeout(callback, 100);
 		}
 
 	}
 
 	function placeContent() {
-		$scope.recipes.list = RecipeAdviserService.getSelectedRecipes();
-		$scope.items = RecipeAdviserService.getFridgeContent();
+
+  	console.log("Placing");
+
+  	$scope.loading = true;
+  	$scope.recipes.loading = true;
 
 		$timeout(function() {
+			$scope.recipes.list = RecipeAdviserService.getSelectedRecipes();
+			$scope.items = RecipeAdviserService.getFridgeContent();
+
+			console.log($scope.recipes.list);
 			$scope.recipes.loading = false;
 			$scope.loading = false;
 		}, 50);
@@ -115,13 +131,20 @@ angular.module('myApp.index', ['ngRoute'])
 
     MainService.saveItem($scope.addItem.productAmount, $scope.addItem.limit_date, $scope.addItem.selectedProduct, $scope.fridge_id)
       .then(function(success){
-        $scope.items.push(success.data);  // Let's avoid to reload the page and fetch again in the database
+      	console.log(success);
+        // $scope.items.push(success.data);  // Let's avoid to reload the page and fetch again in the database
+				RecipeAdviserService.addItemToFridge(success.data);
 
         $timeout(function() {
+
+					// $scope.loading = true;
+
+					loadRecipes();
+
 					$scope.addItem.addingProduct = false;
 					$scope.addItem.selectedProduct = {};
-					// $scope.recipes.loading = true;
-					loadRecipes();
+
+
 
 				}, 100);
 
@@ -130,7 +153,31 @@ angular.module('myApp.index', ['ngRoute'])
       });
   }
 
+  $scope.deleteItem = deleteItem;
+  function deleteItem(item, index) {
 
+  	console.log("Index : " + index);
+
+  	ApiService.delete("items/" + item.id).then(
+  		function(response) {
+  			// $scope.items.splice(index, 1);
+				loadRecipes();
+
+				$timeout(function() {
+					$scope.recipes.loading = true;
+				}, 100)
+
+			},
+			function(error) {
+  			console.warn(error);
+
+			}
+		);
+
+
+
+
+	}
 
 
 }]);

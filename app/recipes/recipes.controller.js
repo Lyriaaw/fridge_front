@@ -50,6 +50,8 @@ angular.module('myApp.recipes', ['ngRoute'])
         // console.log("Received response : ");
         console.log(response);
 				RecipeAdviserService.pushLastRecipe(response);
+				RecipeAdviserService.process();
+
         $location.path("recipe/" + response.data)
       }
     )

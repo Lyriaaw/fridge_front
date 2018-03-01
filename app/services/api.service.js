@@ -3,7 +3,9 @@ var ApiService = angular.module('ApiService', [])
 	var apiServiceInstance = {
 		call: call,
 		get: get,
-		post: post
+		post: post,
+		put: put,
+		delete: doDelete
 	};
 
 	var config = {
@@ -31,6 +33,16 @@ var ApiService = angular.module('ApiService', [])
 	function post(url, body) {
 		return $http.post(config.url + url, body);
 	}
+
+	function put(url, body) {
+		return $http.put(config.url + url, body);
+	}
+
+	function doDelete(url) {
+		return $http.delete(config.url + url);
+	}
+
+
 
 
 	// apiServiceInstance.call = call;

@@ -1,6 +1,8 @@
 var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 .service("RecipeAdviserService", ['ApiService', 'DataService', '$timeout', function(ApiService, DataService, $timeout) {
 
+
+
 	var availableRecipes = [];
 	var fridge_content = [];
 	var fridge_id;
@@ -12,9 +14,9 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 	 * Launching
 	 */
 	function findAvailableRecipes() {
+		process_loading = true;
 		waitForFridgeId(process);
 	}
-
 	/**
 	 * Wait for the fridge_id to start the process
 	 * @param callback
@@ -32,6 +34,7 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 
 	function process() {
 		console.log("Launching process");
+
 
 		fetchRecipes().then(
 			function(response) {
@@ -71,7 +74,7 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 		)
 	}
 	function calculateRecipeScore() {
-		console.log("Calculating score : TODO");
+		console.log(availableRecipes.slice(0, 3));
 		selected_recipes = availableRecipes.slice(0, 3);
 	}
 
@@ -103,6 +106,14 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 		return finished_recipe;
 	}
 
+	function addItemToFridge(item) {
+		fridge_content.push(item);
+	}
+
+	function deleteItemFromFridge($index) {
+		fridge_content.splice($index, 1);
+	}
+
 	return {
 		findAvailableRecipes: findAvailableRecipes,
 		getProcessLoading: getProcessLoading,
@@ -110,8 +121,10 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 		getFridgeContent: getFridgeContent,
 		finishRecipe: finishRecipe,
 		getFinishedRecipe: getFinishedRecipe,
-		pushLastRecipe: pushLastRecipe
+		pushLastRecipe: pushLastRecipe,
+		process: process,
+		addItemToFridge: addItemToFridge,
 
-	}
+	};
 
 }]);

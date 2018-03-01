@@ -1,0 +1,66 @@
+<div ng-include="headerUrl"></div>
+
+
+<div class="row" ng-if="!loading">
+
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">New Product</span>
+
+                <hr>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="Name" id="name" type="text" class="validate" ng-model="new_product.name">
+                        <label for="name"></label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input placeholder="Unit" id="unit" type="text" class="validate" ng-model="new_product.unit">
+                        <label for="unit"></label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <textarea id="description" class="materialize-textarea" ng-model="new_product.description"></textarea>
+                        <label for="description"></label>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card-action">
+                <a ng-click="addProduct()" ng-if="!updating">Add</a>
+                <a ng-click="functions.updateSaveProduct()"  ng-if="updating">Update</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col s12">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Products list</span>
+
+                <hr>
+
+                <ul>
+                    <li class="row" ng-repeat="product in products">
+                        <span class="col s3"><a ng-click="functions.updateProduct(product)">Update</a> </span>
+                        <span class="col s3">{{product.name}}</span>
+                        <span class="col s3">{{product.unit}}</span>
+                        <span class="col s3"><a ng-click="functions.deleteProduct(product)">DELETE</a> </span>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="card-action">
+                <a ng-click="addProduct()">Add</a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>

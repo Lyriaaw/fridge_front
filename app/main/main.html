@@ -9,22 +9,26 @@
             <div class="col s12 m12">
                 <div class="card" ng-if="!loading">
                     <div class="card-content">
-                        <span class="card-title">My Pantry - {{fridge_id}}</span>
+                        <span class="card-title">Fridge n° {{fridge_id}}</span>
                         <ul>
                             <li class="row text-center">
                                 <span class="col s4">
                                     <strong>Name</strong>
                                 </span>
-                                <span class="col s4">
-                                    <strong>Limit date</strong>
-                                </span>
+                                <!--<span class="col s4">-->
+                                    <!--<strong>Limit date</strong>-->
+                                <!--</span>-->
                                 <span class="col s4">
                                     <strong>Quantity</strong>
                                 </span>
                             </li>
                         </ul>
                         <ul>
-                            <li ng-repeat="item in items" class="row"><span class="col s4">{{ item.product.name }}</span><span class="col s4">{{item.limit_date | date : 'dd/MM/yyyy'}}</span><span class="col s4 text-right">{{ item.quantity }} {{ item.product.unit}}</span> </li>
+                            <li ng-repeat="item in items track by $index" class="row">
+                                <span class="col s4">{{ item.product.name }}</span>
+                                <span class="col s4 text-right">{{ item.quantity }} {{ item.product.unit}}</span>
+                                <span><a ng-click="deleteItem(item, $index)">Delete</a></span>
+                            </li>
                         </ul>
                     </div>
                     <div class="card-action">
@@ -72,36 +76,6 @@
 
     <div class="col s12 m12 l6">
         <div ng-include="'./main/recipes-suggestions.html'"></div>
-
-        <div class="col s12 m6"  ng-if="!loading">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Soon obsolete</span>
-                    <ul >
-                        <li ng-repeat="item in obsolete_items" class="row"><span class="col s4">{{ item.product.name }}</span><span class="col s4">{{item.limit_date | date : 'dd/MM/yyyy'}}</span><span class="col s4 text-right">{{ item.quantity }} {{ item.product.unit}}</span> </li>
-                    </ul>
-                </div>
-                <div class="card-action">
-                    <!--<a href="#">Add receipe</a>-->
-                    <!--<a href="#">Show more</a>-->
-                </div>
-            </div>
-        </div>
-
-        <div class="col s12 m6"  ng-if="!loading">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Last product added</span>
-                    <ul >
-                        <li ng-repeat="product in products.slice().reverse()" class="last_product"><span>{{ product.name }}</span> <span class="pull-right">{{ product.quantity }} {{ product.unit}}</span> </li>
-                    </ul>
-                </div>
-                <div class="card-action">
-                    <!--<a href="#">Show more</a>-->
-
-                </div>
-            </div>
-        </div>
     </div>
 
 

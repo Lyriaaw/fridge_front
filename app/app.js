@@ -9,6 +9,8 @@ angular.module('myApp', [
   'myApp.version',
 	'myApp.recipe-finished',
 	'RecipeFinishedService',
+	'myApp.new-product',
+	'NewProductService',
 	'ApiService',
 	'DataService',
 	'RecipeAdviserService',
