@@ -25,6 +25,12 @@
 }
 
 
+body {
+  background-image: url("images/background-3045402_1920.png");
+  background-blend-mode: lighten;
+}
+
+
 
 
 
@@ -51,4 +57,8 @@
 .full-size {
   display : flex;
   justify-content: space-between;
+}
+
+.navbar_margin {
+  margin-bottom: 1vh;
 }

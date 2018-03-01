@@ -1,0 +1,45 @@
+<div ng-include="headerUrl"></div>
+
+
+<div class="row" ng-if="!loading">
+
+    <div class="col s6">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">{{recipe.name}}</span>
+                <hr>
+
+                <div class="row">
+                    <div class="col m6 s12">
+                        <h5><strong>Initial quantity</strong></h5>
+                    </div>
+                    <div class="col m6 s12">
+                        <h5><strong>Final quantity</strong></h5>
+                    </div>
+
+                </div>
+
+                <div ng-repeat="proportion in proportions" class="row">
+                    <div class="col m6 s12">
+                        <h5>{{proportion.product.name}}</h5>
+                        <p>{{proportion.initial_quantity}} {{proportion.product.unit}}</p>
+                    </div>
+                    <div class="input-field col m6 s12">
+                        <input id="real_quantity" type="number" class="validate" ng-model="proportion.real_quantity">
+                        <label for="real_quantity"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-action">
+                <a href="#">Finished</a>
+            </div>
+        </div>
+    </div>
+
+
+    <p>{{finished_recipe.name}}</p>
+
+
+
+</div>

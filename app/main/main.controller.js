@@ -8,7 +8,7 @@ angular.module('myApp.index', ['ngRoute'])
     controller: 'MainCtrl'
   });
 }])
-.controller('MainCtrl', ['$scope', 'MainService', '$timeout', '$routeParams', 'DataService', function($scope, MainService, $timeout, $routeParams, DataService) {
+.controller('MainCtrl', ['$scope', 'MainService', '$timeout', '$routeParams', 'DataService', 'RecipeAdviserService', function($scope, MainService, $timeout, $routeParams, DataService, RecipeAdviserService) {
 
   $scope.loading = true;
   $scope.obsolete_loading = true;
@@ -17,7 +17,50 @@ angular.module('myApp.index', ['ngRoute'])
 
 
 
+  $scope.recipes = {
+  	loading: true,
+  	list: []
+	};
 
+
+  // Launch the recipe adviser and wait for result
+
+  function loadRecipes() {
+		RecipeAdviserService.findAvailableRecipes();
+
+		waitForRecipes(placeContent)
+	}
+
+  function waitForRecipes(callback) {
+  	if (RecipeAdviserService.getProcessLoading() === true) {
+  		setTimeout(waitForRecipes, 100, callback);
+		} else {
+  		setTimeout(callback, 50);
+		}
+
+	}
+
+	function placeContent() {
+		$scope.recipes.list = RecipeAdviserService.getSelectedRecipes();
+		$scope.items = RecipeAdviserService.getFridgeContent();
+
+		$timeout(function() {
+			$scope.recipes.loading = false;
+			$scope.loading = false;
+		}, 50);
+	}
+
+	loadContent();
+  loadRecipes(); // TODO : Wait for laodContent() before launching loadRecipes()
+
+  function loadContent() {
+		DataService.saveFridgeId($routeParams.id);
+  }
+
+
+
+
+  // Pages animations
 
 	$scope.addItem = {
     addingProduct: false,
@@ -28,67 +71,6 @@ angular.module('myApp.index', ['ngRoute'])
     productAmount: 0,
 		limit_date: new Date()
   };
-
-
-  $scope.recipes = {
-  	loading: true,
-  	list: []
-	};
-
-  function loadRecipes() {
-		// $scope.fridge_id = $routeParams.id;
-  	MainService.findAvailableRecipes($scope.fridge_id).then(
-  		function(response) {
-  			$scope.recipes.list = response.data;
-
-  			$timeout(function() {
-  				$scope.recipes.loading = false;
-				}, 100);
-			},
-			function(error) {
-
-			}
-		)
-	}
-	loadRecipes();
-
-
-  function loadContent() {
-		// $scope.fridge_id = $routeParams.id;
-
-		DataService.saveFridgeId($routeParams.id);
-
-    MainService.getContent($scope.fridge_id)
-      .then(function(response) {
-
-      	console.log(response.data);
-
-        $scope.items = response.data;
-
-				$timeout(function() {
-					$scope.loading = false;
-				}, 100);
-
-      }, function(error) {
-        console.warn(error);
-      });
-
-
-    MainService.getSoonObsoleteItems($scope.fridge_id)
-		// Todo : Fetch products from fridge content directly
-			.then(function(response) {
-				$scope.obsolete_items = response.data;
-				$timeout(function() {
-					$scope.obsolete_loading = false;
-				}, 100);
-			}, function(error) {
-				console.warn(error);
-			});
-  }
-
-  loadContent();
-
-  //
 
 	$scope.cancelItemAdding = cancelItemAdding;
 	function cancelItemAdding() { // Hide the "Add item" card

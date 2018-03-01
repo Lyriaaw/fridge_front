@@ -1,8 +1,6 @@
 var MainService = angular.module('MainService', [])
 
 .service('MainService', ['ApiService', function(ApiService) {
-// TODO : Place Service in a different file
-// TODO : Take data control out of the controller and place it in the service
 var mainServiceInstance = {
 	getContent: getFridgeContent,
 	getSoonObsoleteItems: getSoonObsoleteItems,
@@ -10,6 +8,7 @@ var mainServiceInstance = {
 	saveItem: saveItem,
 	findAvailableRecipes: findAvailableRecipes
 };
+// Todo : Clean
 
 
 

@@ -7,10 +7,14 @@ angular.module('myApp', [
   'myApp.recipes',
   'myApp.view-recipe',
   'myApp.version',
+	'myApp.recipe-finished',
+	'RecipeFinishedService',
 	'ApiService',
 	'DataService',
+	'RecipeAdviserService',
 	'RecipesService',
-	'MainService'
+	'MainService',
+	'ViewRecipeService'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');

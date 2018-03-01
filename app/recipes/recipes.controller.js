@@ -9,7 +9,7 @@ angular.module('myApp.recipes', ['ngRoute'])
   });
 }])
 
-.controller('RecipesCtrl', ['$scope', 'RecipesService', '$timeout', '$location', 'DataService', function($scope, RecipesService, $timeout, $location, DataService) {
+.controller('RecipesCtrl', ['$scope', 'RecipesService', '$timeout', '$location', 'DataService', 'RecipeAdviserService', function($scope, RecipesService, $timeout, $location, DataService, RecipeAdviserService) {
   $scope.loading = true;
   $scope.products = [];
 
@@ -48,8 +48,9 @@ angular.module('myApp.recipes', ['ngRoute'])
     RecipesService.saveRecipe($scope.newRecipe).then(
       function(response) {
         // console.log("Received response : ");
-        // console.log(response);
-        $location.path("recipe/" + response.data.id + "/" + $scope.fr)
+        console.log(response);
+				RecipeAdviserService.pushLastRecipe(response);
+        $location.path("recipe/" + response.data)
       }
     )
   }

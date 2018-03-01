@@ -8,7 +8,7 @@ angular.module('myApp.view-recipe', ['ngRoute'])
     controller: 'ViewRecipeCtrl'
   });
 }])
-.controller('ViewRecipeCtrl', ['$scope', 'ViewRecipeService', '$timeout', '$routeParams', function($scope, ViewRecipeService, $timeout, $routeParams) {
+.controller('ViewRecipeCtrl', ['$scope', 'ViewRecipeService', '$timeout', '$routeParams', 'RecipeAdviserService', '$location', function($scope, ViewRecipeService, $timeout, $routeParams, RecipeAdviserService, $location) {
   $scope.loading = true;
   $scope.recipe = {};
 
@@ -20,7 +20,8 @@ angular.module('myApp.view-recipe', ['ngRoute'])
   };
 
   function finished() {
-    console.log("Recipe finished");
+    RecipeAdviserService.finishRecipe($scope.recipe);
+		$location.path("recipe/finished/" + $scope.recipe.id)
   }
 
   function cancelRecipe() {

@@ -1,11 +1,13 @@
 <div ng-include="headerUrl"></div>
 
 
+
+
 <div class="row">
     <div class="col s12 m12 l6">
         <div class="row">
             <div class="col s12 m12">
-                <div class="card indigo lighten-5" ng-if="!loading">
+                <div class="card" ng-if="!loading">
                     <div class="card-content">
                         <span class="card-title">My Pantry - {{fridge_id}}</span>
                         <ul>
@@ -34,38 +36,8 @@
             </div>
 
 
-            <div class="col s12 m6"  ng-if="!loading && !addItem.addingProduct">
-                <div class="card indigo lighten-5">
-                    <div class="card-content">
-                        <span class="card-title">Soon obsolete</span>
-                        <ul >
-                            <li ng-repeat="item in obsolete_items" class="row"><span class="col s4">{{ item.product.name }}</span><span class="col s4">{{item.limit_date | date : 'dd/MM/yyyy'}}</span><span class="col s4 text-right">{{ item.quantity }} {{ item.product.unit}}</span> </li>
-                        </ul>
-                    </div>
-                    <div class="card-action">
-                        <!--<a href="#">Add receipe</a>-->
-                        <!--<a href="#">Show more</a>-->
-                    </div>
-                </div>
-            </div>
-
-            <div class="col s12 m6"  ng-if="!loading && !addItem.addingProduct">
-                <div class="card indigo lighten-5">
-                    <div class="card-content">
-                        <span class="card-title">Last product added</span>
-                        <ul >
-                            <li ng-repeat="product in products.slice().reverse()" class="last_product"><span>{{ product.name }}</span> <span class="pull-right">{{ product.quantity }} {{ product.unit}}</span> </li>
-                        </ul>
-                    </div>
-                    <div class="card-action">
-                        <!--<a href="#">Show more</a>-->
-
-                    </div>
-                </div>
-            </div>
-
             <div class="col s12"  ng-if="addItem.addingProduct">
-                <div class="card indigo lighten-5">
+                <div class="card">
                     <div class="card-content">
                         <span class="card-title">Add a product</span>
                         <ul ng-if="addItem.waitingForProduct">
@@ -99,19 +71,39 @@
     </div>
 
     <div class="col s12 m12 l6">
-        <div class="card indigo lighten-5" ng-if="!recipes.loading">
-            <div class="card-content">
-                <span class="card-title">Recipes</span>
-                <ul ng-repeat="recipe in recipes.list">
-                    <li class="row"><span class="col s4">{{recipe.name}}</span> <span class="col s4">{{recipe.people}}</span> <span class="col s4"><a href="/#!/recipe/{{recipe.id}}">View</a></span></li>
-                </ul>
+        <div ng-include="'./main/recipes-suggestions.html'"></div>
+
+        <div class="col s12 m6"  ng-if="!loading">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Soon obsolete</span>
+                    <ul >
+                        <li ng-repeat="item in obsolete_items" class="row"><span class="col s4">{{ item.product.name }}</span><span class="col s4">{{item.limit_date | date : 'dd/MM/yyyy'}}</span><span class="col s4 text-right">{{ item.quantity }} {{ item.product.unit}}</span> </li>
+                    </ul>
+                </div>
+                <div class="card-action">
+                    <!--<a href="#">Add receipe</a>-->
+                    <!--<a href="#">Show more</a>-->
+                </div>
             </div>
-            <div class="card-action">
-                <!--<a href="#">Add receipe</a>-->
-                <!--<a href="#">Show more</a>-->
+        </div>
+
+        <div class="col s12 m6"  ng-if="!loading">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Last product added</span>
+                    <ul >
+                        <li ng-repeat="product in products.slice().reverse()" class="last_product"><span>{{ product.name }}</span> <span class="pull-right">{{ product.quantity }} {{ product.unit}}</span> </li>
+                    </ul>
+                </div>
+                <div class="card-action">
+                    <!--<a href="#">Show more</a>-->
+
+                </div>
             </div>
         </div>
     </div>
+
 
 
 

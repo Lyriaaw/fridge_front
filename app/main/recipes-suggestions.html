@@ -1,0 +1,42 @@
+
+<div class="card" ng-if="recipes.loading">
+    <div class="card-content">
+        <span class="card-title">Recipes loading .... </span>
+    </div>
+</div>
+
+
+
+<div  ng-repeat="recipe in recipes.list |limitTo: 3">
+    <div class="card " ng-if="!recipes.loading">
+        <div class="card-content">
+            <span class="card-title">{{recipe.name}}</span>
+
+            <p>{{recipe.description}}</p>
+
+        </div>
+        <div class="card-action">
+        <!--<a href="#">Add receipe</a>-->
+            <a href="/#!/recipe/{{recipe.id}}">View</a>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+    <!--<div class="card indigo lighten-5" ng-if="!recipes.loading">-->
+        <!--<div class="card-content">-->
+            <!--<span class="card-title">Recipes</span>-->
+            <!--<ul ng-repeat="recipe in recipes.list">-->
+                <!--<li class="row"><span class="col s4">{{recipe.name}}</span> <span class="col s4">{{recipe.people}}</span> <span class="col s4"><a href="/#!/recipe/{{recipe.id}}">View</a></span></li>-->
+            <!--</ul>-->
+        <!--</div>-->
+        <!--<div class="card-action">-->
+            <!--&lt;!&ndash;<a href="#">Add receipe</a>&ndash;&gt;-->
+            <!--&lt;!&ndash;<a href="#">Show more</a>&ndash;&gt;-->
+        <!--</div>-->
+    <!--</div>-->

@@ -1,5 +1,5 @@
 var ViewRecipeService = angular.module('ViewRecipeService', [])
-.service('ViewRecipeService', ['ApiService', '$timeout', function(ApiService, $timeout) {
+.service('ViewRecipeService', ['ApiService', function(ApiService) {
 
 	function getRecipe(recipeId) {
 		return ApiService.get("recipes/" + recipeId);
@@ -10,4 +10,4 @@ var ViewRecipeService = angular.module('ViewRecipeService', [])
 		getRecipe: getRecipe
 	}
 
-}])
+}]);
