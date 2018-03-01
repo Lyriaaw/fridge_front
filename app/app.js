@@ -6,73 +6,14 @@ angular.module('myApp', [
   'myApp.index',
   'myApp.recipes',
   'myApp.view-recipe',
-  'myApp.version'
+  'myApp.version',
+	'ApiService',
+	'DataService',
+	'RecipesService',
+	'MainService'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
 
   $routeProvider.otherwise({redirectTo: '/fridge/1'});
-}])
-.service("ApiService", ['$http', function($http) {// TODO : Place Service in a different file
-	var apiServiceInstance = {
-	  call: call,
-	  get: get,
-	  post: post
-  };
-
-	var config = {
-		url: 'http://127.0.0.1:3000/'
-	};
-
-	// Test with a callback, not convinced ...
-	function call(url, callback){
-		return $http({
-			method: 'GET',
-			url: config.url + url
-		}).then(callback, function() {
-			console.warn("Request to " + url + " failed");
-		});
-	}
-
-
-	function get(url) {
-		return $http({
-			method: 'GET',
-			url: config.url + url
-		});
-	}
-
-	function post(url, body) {
-		return $http.post(config.url + url, body);
-	}
-
-
-	// apiServiceInstance.call = call;
-
-	return apiServiceInstance;
-}])
-.service("DataService", ['$http', '$rootScope', function($http, $rootScope) {
-
-	var stored_datas = {
-		fridge_id: -1
-	};
-
-
-	function saveFridgeId(fridge_id) {
-		stored_datas.fridge_id = fridge_id;
-		$rootScope.fridge_id = fridge_id;
-	}
-
-	function getFridgeId() {
-		return stored_datas.fridge_id;
-	}
-
-	return {
-		saveFridgeId: saveFridgeId,
-		getFridgeId: getFridgeId
-
-	}
-}])
-
-
-;
+}]);

@@ -8,20 +8,6 @@ angular.module('myApp.view-recipe', ['ngRoute'])
     controller: 'ViewRecipeCtrl'
   });
 }])
-.service('ViewRecipeService', ['ApiService', '$timeout', function(ApiService, $timeout) {
-
-
-  // Todo : Implement this function in APIService or create a ProductService
-  function getRecipe(recipeId) {
-    return ApiService.get("recipes/" + recipeId);
-  }
-
-
-  return {
-		getRecipe: getRecipe
-  }
-
-}])
 .controller('ViewRecipeCtrl', ['$scope', 'ViewRecipeService', '$timeout', '$routeParams', function($scope, ViewRecipeService, $timeout, $routeParams) {
   $scope.loading = true;
   $scope.recipe = {};
