@@ -30,7 +30,7 @@
             </div>
 
             <div class="card-action">
-                <a ng-click="addProduct()" ng-if="!updating">Add</a>
+                <a ng-click="functions.addProduct()" ng-if="!updating">Add</a>
                 <a ng-click="functions.updateSaveProduct()"  ng-if="updating">Update</a>
             </div>
         </div>
@@ -48,14 +48,10 @@
                         <span class="col s3"><a ng-click="functions.updateProduct(product)">Update</a> </span>
                         <span class="col s3">{{product.name}}</span>
                         <span class="col s3">{{product.unit}}</span>
-                        <span class="col s3"><a ng-click="functions.deleteProduct(product)">DELETE</a> </span>
+                        <span class="col s3"><a ng-click="functions.deleteProduct(product)">Delete</a> </span>
                     </li>
                 </ul>
 
-            </div>
-
-            <div class="card-action">
-                <a ng-click="addProduct()">Add</a>
             </div>
         </div>
     </div>

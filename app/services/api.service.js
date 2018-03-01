@@ -1,7 +1,6 @@
 var ApiService = angular.module('ApiService', [])
 .service("ApiService", ['$http', function($http) {
 	var apiServiceInstance = {
-		call: call,
 		get: get,
 		post: post,
 		put: put,
@@ -11,17 +10,6 @@ var ApiService = angular.module('ApiService', [])
 	var config = {
 		url: 'http://127.0.0.1:3000/'
 	};
-
-	// Test with a callback, not convinced ...
-	function call(url, callback){
-		return $http({
-			method: 'GET',
-			url: config.url + url
-		}).then(callback, function() {
-			console.warn("Request to " + url + " failed");
-		});
-	}
-
 
 	function get(url) {
 		return $http({
@@ -42,10 +30,5 @@ var ApiService = angular.module('ApiService', [])
 		return $http.delete(config.url + url);
 	}
 
-
-
-
-	// apiServiceInstance.call = call;
-
 	return apiServiceInstance;
-}])
+}]);

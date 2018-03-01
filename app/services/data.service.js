@@ -1,6 +1,8 @@
 var DataService = angular.module('DataService', [])
 .service("DataService", ['$http', '$rootScope', function($http, $rootScope) {
 
+	// Used to store internal application data
+
 	var stored_datas = {
 		fridge_id: -1
 	};

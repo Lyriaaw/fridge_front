@@ -36,11 +36,8 @@ angular.module('myApp.index', ['ngRoute'])
 		waitForRecipes(placeContent)
 	}
 
-  function waitForRecipes(callback) {
-  	console.log("Waiting for recipes");
-  	console.log(RecipeAdviserService.getProcessLoading());
+  function waitForRecipes(callback) { // Wait for the recipe adviser to be reader
   	if (RecipeAdviserService.getProcessLoading() === true) {
-  		console.log("Process loading .... ");
   		setTimeout(waitForRecipes, 100, callback);
 		} else {
   		setTimeout(callback, 100);
@@ -48,10 +45,7 @@ angular.module('myApp.index', ['ngRoute'])
 
 	}
 
-	function placeContent() {
-
-  	console.log("Placing");
-
+	function placeContent() { // Save the recipes and render it
   	$scope.loading = true;
   	$scope.recipes.loading = true;
 
@@ -59,7 +53,6 @@ angular.module('myApp.index', ['ngRoute'])
 			$scope.recipes.list = RecipeAdviserService.getSelectedRecipes();
 			$scope.items = RecipeAdviserService.getFridgeContent();
 
-			console.log($scope.recipes.list);
 			$scope.recipes.loading = false;
 			$scope.loading = false;
 		}, 50);
@@ -126,8 +119,10 @@ angular.module('myApp.index', ['ngRoute'])
 
 
 	$scope.saveItem = saveItem;
+	/**
+	 * Create an item, save it in the database and launch a new recipe research
+	 */
   function saveItem() {
-
     MainService.saveItem($scope.addItem.productAmount, '2018-03-01', $scope.addItem.selectedProduct, $scope.fridge_id)
       .then(function(success){
 				RecipeAdviserService.addItemToFridge(success.data);
@@ -135,8 +130,7 @@ angular.module('myApp.index', ['ngRoute'])
         $timeout(function() {
 					loadRecipes();
 
-					$scope.addItem.productAmount = '';
-
+					$scope.addItem.productAmount = '';	// Resetting form for the next item
 					$scope.addItem.addingProduct = false;
 					$scope.addItem.selectedProduct = {};
 					$scope.addItem.waitingForProduct = true;
@@ -148,9 +142,13 @@ angular.module('myApp.index', ['ngRoute'])
   }
 
   $scope.deleteItem = deleteItem;
-  function deleteItem(item, index) {
 
-  	console.log("Index : " + index);
+	/**
+	 * Delete and item from the database and launch a new recipe research
+	 * @param item
+	 * @param index
+	 */
+  function deleteItem(item, index) {
 
   	ApiService.delete("items/" + item.id).then(
   		function(response) {
@@ -166,10 +164,6 @@ angular.module('myApp.index', ['ngRoute'])
 
 			}
 		);
-
-
-
-
 	}
 
 

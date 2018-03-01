@@ -21,7 +21,7 @@ angular.module('myApp.recipe-finished', ['ngRoute'])
 	function loadContent() {
 		$scope.recipe = RecipeAdviserService.getFinishedRecipe();
 
-		$scope.recipe.recipes_items.forEach(function(item) {
+		$scope.recipe.recipes_items.forEach(function(item) { // creating the real_proportions based on the product and the initial initial quantity
 			$scope.proportions.push({
 				product: item.product,
 				initial_quantity: item.quantity,
@@ -43,26 +43,32 @@ angular.module('myApp.recipe-finished', ['ngRoute'])
 	 */
 	$scope.calculateProportions = calculateProportions;
 	function calculateProportions() {
-
 		var fridge_content = RecipeAdviserService.getFridgeContent();
 
 		var changed_items = [];
 
-
+		/*
+		Running throw all proportions and all items and testing id's equality :/
+		 */
 		$scope.proportions.forEach(function(proportion) {
 			fridge_content.forEach(function(item) {
+
 				if (proportion.product.id === item.product.id) {
 					item.quantity -= proportion.real_quantity;
 					changed_items.push(item);
 				}
+
 			});
 		});
 
 		separateFinishedAndUpdatedItems(changed_items);
 
-
 	}
 
+	/**
+	 * Separate the items after the quantity remove
+	 * @param items
+	 */
 	function separateFinishedAndUpdatedItems(items) {
 
 		var finished = [];
@@ -71,18 +77,20 @@ angular.module('myApp.recipe-finished', ['ngRoute'])
 		items.forEach(function(item) {
 			if (item.quantity <= 0) {
 				finished.push(item);
-				console.log(item.product.name + " is finished");
 			} else {
-				console.log(item.product.name + " is to update");
 				to_update.push(item);
 			}
 		});
 
+		updateItems(to_update);
+		deleteItems(finished);
+	}
+
+	function updateItems(to_update) { // Update the items where the quantity is more than 0
 		var new_changed_item = {
 			items: to_update
 		};
 
-		console.log("Putting");
 		ApiService.put("items", new_changed_item).then(
 			function(success) {
 				console.log(success);
@@ -90,11 +98,11 @@ angular.module('myApp.recipe-finished', ['ngRoute'])
 			},
 			function(error) {
 				console.warn(error);
-
 			}
 		);
+	}
 
-		console.log("Deleting");
+	function deleteItems(finished) { // delete the items that are finished
 		finished.forEach(function(item) {
 			ApiService.delete("items/" + item.id).then(
 				function(response) {
@@ -106,8 +114,6 @@ angular.module('myApp.recipe-finished', ['ngRoute'])
 				}
 			)
 		});
-
 	}
-
 
 }]);

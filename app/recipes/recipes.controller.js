@@ -13,9 +13,6 @@ angular.module('myApp.recipes', ['ngRoute'])
   $scope.loading = true;
   $scope.products = [];
 
-	$scope.headerUrl = "header.html";
-
-
 
   function newRecipe() {
 		$scope.newRecipe = {
@@ -40,30 +37,27 @@ angular.module('myApp.recipes', ['ngRoute'])
 
 
   function cancelRecipe() {
-    console.log("Canceling recipe");
     newRecipe();
   }
 
   function saveRecipe() {
     RecipesService.saveRecipe($scope.newRecipe).then(
       function(response) {
-        // console.log("Received response : ");
-        console.log(response);
-				RecipeAdviserService.pushLastRecipe(response);
-				RecipeAdviserService.process();
+				RecipeAdviserService.pushLastRecipe(response); 	// adding the recipe to the front_memory
+				RecipeAdviserService.process();									// new recipe research with this new recipe
 
-        $location.path("recipe/" + response.data)
+        $location.path("recipe/" + response.data.id)				// Moving to recipe page
       }
     )
   }
 
-  function addItem() {
+  function addItem() { // Add an item to the recipe form
     $scope.newRecipe.recipes_items.push(
       {product: {}, quantity: ''}
     )
   }
 
-  function addStep() {
+  function addStep() { // Add an step to the recipe form
 		$scope.newRecipe.recipes_steps.push(
 			{description: ''}
     )
@@ -71,28 +65,25 @@ angular.module('myApp.recipes', ['ngRoute'])
 
 
 
-
+  loadProducts();
+	/**
+	 * Get the list of product for the selects
+	 */
   function loadProducts() {
+		newRecipe();
     RecipesService.getProducts().then(
       function(response) {
         $scope.products = response.data;
-        console.log($scope.products);
-        newRecipe();
 
         $timeout(function() {
           $scope.loading = false;
-
         }, 100);
       },
       function(error) {
-
+      	console.warn(error);
       }
     );
   }
-  loadProducts();
-
-
-
 
 
 

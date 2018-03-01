@@ -18,38 +18,39 @@ angular.module('myApp.new-product', ['ngRoute'])
 
 	$scope.products = [];
 
-	$scope.new_product = {
-		name: '',
-		unit: '',
-		description: ''
-	};
 
-	$scope.addProduct = addProduct;
-	function addProduct() {
-		console.log($scope.new_product);
-
-		ApiService.post("products", $scope.new_product).then(
-			function(response) {
-				$scope.products.push(response.data);
-			}, function(error) {
-				console.warn(error);
-			}
-		)
+	function addNewProduct() { // Reset the new_product form
+		$scope.new_product = {
+			name: '',
+			unit: '',
+			description: ''
+		};
+	}
+	function updateProduct(product) { // Move the product from the list to the form
+		$scope.updating = true;
+		$scope.new_product = product;
 	}
 
-	loadProducts();
+
+	loadProducts(); // main load of the page
 	function loadProducts() {
-		$scope.loading = true;
+		$timeout(function() {
+			$scope.loading = true;
+		}, 100);
+
+		addNewProduct();
+
+
 		ApiService.get("products").then(
 			function(response) {
 				$scope.products = response.data;
 
 				$timeout(function() {
 					$scope.loading = false;
-				}, 10);
+				}, 100);
 			},
 			function(error) {
-
+				console.warn(error);
 			}
 		)
 	}
@@ -59,12 +60,33 @@ angular.module('myApp.new-product', ['ngRoute'])
 		deleteProduct: deleteProduct,
 		updateProduct: updateProduct,
 		updateSaveProduct: updateSaveProduct,
+		addProduct: addProduct
 	};
 
+	function addProduct() { // Save the new product in the database
+		ApiService.post("products", $scope.new_product).then(
+			function(response) {
+				$scope.products.push(response.data);
+			}, function(error) {
+				console.warn(error);
+			}
+		)
+	}
+
+	function updateSaveProduct() {
+		ApiService.put("products/" + $scope.new_product.id, $scope.new_product).then(
+			function(response) {
+				$scope.updating = false;
+				addNewProduct();
+			},
+			function(error) {
+				console.warn(error);
+
+			}
+		)
+	}
 
 	function deleteProduct(product) {
-		console.warn("Deleting " + product.name);
-
 		ApiService.delete("products/" + product.id).then(
 			function(response) {
 				loadProducts();
@@ -76,32 +98,6 @@ angular.module('myApp.new-product', ['ngRoute'])
 
 	}
 
-	function updateProduct(product) {
-		console.log("Updating" + product.name);
-		$scope.updating = true;
-		$scope.new_product = product;
-	}
-
-	function updateSaveProduct() {
-		console.log("Sending");
-		ApiService.put("products/" + $scope.new_product.id, $scope.new_product).then(
-			function(response) {
-				console.log("Changed successfully");
-				$scope.updating = false;
-				$scope.new_product = {
-					name: '',
-					unit: '',
-					description: ''
-				};
-
-
-			},
-			function(error) {
-				console.warn(error);
-
-			}
-		)
-	}
 
 
 

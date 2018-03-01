@@ -71,7 +71,7 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 		)
 	}
 	function calculateRecipeScore() {
-		// TODO : implement, now it just select 3 random recipes from the list
+		// TODO : implement, now it just select 5 random recipes from the list
 		selected_recipes = [];
 
 		var temp_list = [];
@@ -98,13 +98,12 @@ var RecipeAdviserService = angular.module('RecipeAdviserService', [])
 	/*
 	Getters and setters to interact with the service
 	 */
-
 	function finishRecipe(recipe) {
 		finished_recipe = recipe;
 	}
 
 	function pushLastRecipe(recipe) {
-		selected_recipes.push(recipe);
+		availableRecipes.push(recipe);
 	}
 
 	function getProcessLoading() {

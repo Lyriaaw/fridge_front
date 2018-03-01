@@ -2,30 +2,13 @@ var MainService = angular.module('MainService', [])
 
 .service('MainService', ['ApiService', function(ApiService) {
 var mainServiceInstance = {
-	getContent: getFridgeContent,
-	getSoonObsoleteItems: getSoonObsoleteItems,
 	getCurrentProducts: getCurrentProducts,
-	saveItem: saveItem,
-	findAvailableRecipes: findAvailableRecipes
+	saveItem: saveItem
 };
-// Todo : Clean
-
-
-
-function getFridgeContent(fridge_id) {
-	return ApiService.get("items/fridge/" + fridge_id);
-}
-function getSoonObsoleteItems(fridge_id) {
-	return ApiService.get("items/fridge/" + fridge_id + "/obsolete");
-}
 
 
 function getCurrentProducts() {
 	return ApiService.get("products");
-}
-
-function findAvailableRecipes(fridge_id) {
-	return ApiService.get("/recipes/find/" + fridge_id);
 }
 
 
@@ -59,4 +42,4 @@ function formatDate(date) {
 
 
 	return mainServiceInstance;
-}])
+}]);

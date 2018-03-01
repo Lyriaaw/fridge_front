@@ -20,19 +20,21 @@ angular.module('myApp.view-recipe', ['ngRoute'])
   };
 
   function finished() {
-    RecipeAdviserService.finishRecipe($scope.recipe);
-		$location.path("recipe/finished/" + $scope.recipe.id)
+    RecipeAdviserService.finishRecipe($scope.recipe); // Save the recipe in the recipe advisor.
+		$location.path("recipe/finished/" + $scope.recipe.id) // Go to the proportion management page
   }
 
-  function cancelRecipe() {
+  function cancelRecipe() { // Go back to the dashboard
     $location.path("fridge/" + DataService.getFridgeId());
   }
 
-  function loadRecipe() {
-    const recipe_id = $routeParams.id;
-    // $scope.fridge_id = $routeParams.fridgeId;
 
-    console.log("Hello ?");
+  loadRecipe();
+	/**
+   * Load the current recipe from the database
+	 */
+	function loadRecipe() {
+    const recipe_id = $routeParams.id;
 
     ViewRecipeService.getRecipe(recipe_id).then(
       function(response) {
@@ -41,13 +43,13 @@ angular.module('myApp.view-recipe', ['ngRoute'])
         $timeout(function() {
           $scope.loading = false;
         }, 100);
+
       },
       function(error) {
         console.warn(error);
       }
     )
   }
-  loadRecipe();
 
 
 
